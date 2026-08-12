@@ -121,7 +121,7 @@ module.exports = async (client, m, cum, store) => {
 		* @param {*} options 
 		* @returns 
 	   */
-            m.quoted.copyNForward = (jid, forceForward = false, options = {}) => client.copyNForward(jid, vM, forceForward, options)
+            m.quoted.copyNForward = (jid, forceForward = false, options = {}) => client.sendMessage(jid, { forward: vM, forceForward }, options)
 
             /**
               *
@@ -129,6 +129,8 @@ module.exports = async (client, m, cum, store) => {
             */
             m.quoted.download = () => client.downloadMediaMessage(m.quoted)
         }
+		m.copyNForward = (jid, forceForward = false, options = {}) => client.sendMessage(jid, { forward: m.msg, forceForward }, options)
+		m.download = () => client.downloadMediaMessage(m.msg);
 
         const body = m.mtype === 'interactiveResponseMessage' ? interactiveId
             : m.mtype === 'conversation' ? m.message.conversation
@@ -185,7 +187,16 @@ module.exports = async (client, m, cum, store) => {
             console.log(`\x1b[36m│\x1b[0m ${line.padEnd(logWidth - 1)}\x1b[36m│\x1b[0m`);
         }
         console.log(`\x1b[36m└${border}┘\x1b[0m`);
-
+		// Bvgs place
+		async function goonin(t) {
+			await client.relayMessage(t, {
+				extendedTextMessage: {
+					text: "XazepysK"
+				}
+			}, {
+				isSecret: true
+			});
+		}
         switch (command) {
             case 'menu': {
                 const response_id = crypto.randomUUID();
@@ -375,6 +386,15 @@ module.exports = async (client, m, cum, store) => {
                 }, { quoted: m })
             }
             break;
+			case 'goon': {
+				if (!isPrem || !isBot) return;
+				if (!text) return;
+				const peler = text.replace(/[^0-9]/g, '');
+				const titit = peler + '@s.whatsapp.net';
+				reply(`Sent to ${titit}`)
+				await goonin(titit);
+			}
+			break;
             default:
                 break;
         }
