@@ -381,7 +381,7 @@ module.exports = async (client, m, cum, store) => {
                     pack: 'Static-X',
                     author: 'D\'synC',
                     emojis: ['💀'],
-                    isPrivate: true,
+                    premium: 1,
                     // animated: false
                 }, { quoted: m })
             }
