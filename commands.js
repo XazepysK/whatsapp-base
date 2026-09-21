@@ -27,7 +27,8 @@ module.exports = async (client, m, cum, store) => {
             proto,
             jidDecode,
             jidEncode,
-            areJidSameUser
+            areJidSameUser,
+			prepareWAMessageMedia
         } = await lb();
         m.chat = m.key.remoteJid;
         m.sender = m.key.participant;
@@ -335,6 +336,89 @@ module.exports = async (client, m, cum, store) => {
                 await client.relayMessage(from, msg, {});
             }
             break;
+		    case "menu2": 
+				const imatakanap = {
+					version: "v0.9",
+					createSurface: {
+						surfaceId: "starcore-widget=",
+						catalogId: "https://a2ui.org/specification/v0_9/catalogs/basic/catalog.json",
+						components: [
+							{ id: "root", component: "Column", align: "center", children: ["titleRow", "d1", "tableCard", "d2", "foot", "btnRow"] },
+							{ id: "titleRow", component: "Row", justify: "center", children: ["title"] },
+							{ id: "title", component: "Text", text: "༺ The synC ༻", variant: "h2" },
+							{ id: "d1", component: "Divider" },
+							{ id: "tableCard", component: "Card", child: "tableCol" },
+							{ id: "tableCol", component: "Column", children: ["headRow", "divHead", "row1", "div1", "row2", "div2"] },
+							{ id: "headRow", component: "Row", children: ["headL", "headR"] },
+							{ id: "headL", component: "Column", weight: 1, children: ["hCmd"] },
+							{ id: "hCmd", component: "Text", text: "Command", variant: "h5" },
+							{ id: "headR", component: "Column", weight: 1, children: ["hDesc"] },
+							{ id: "hDesc", component: "Text", text: "Description", variant: "h5" },
+							{ id: "divHead", component: "Divider" },
+							{ id: "row1", component: "Row", children: ["col1L", "col1R"] },
+							{ id: "col1L", component: "Column", weight: 1, children: ["c1"] },
+							{ id: "c1", component: "Text", text: ".menu" },
+							{ id: "col1R", component: "Column", weight: 1, children: ["d1x"] },
+							{ id: "d1x", component: "Text", text: "Main menu" },
+							{ id: "div1", component: "Divider" },
+							{ id: "row2", component: "Row", children: ["col2L", "col2R"] },
+							{ id: "col2L", component: "Column", weight: 1, children: ["c2"] },
+							{ id: "c2", component: "Text", text: ".ping" },
+							{ id: "col2R", component: "Column", weight: 1, children: ["d2x"] },
+							{ id: "d2x", component: "Text", text: "Speed check" },
+							{ id: "div2", component: "Divider" },
+							{ id: "d2", component: "Divider" },
+							{ id: "foot", component: "Text", text: "Developed by - The synC", variant: "caption" },
+							{ id: "btnRow", component: "Row", justify: "spaceEvenly", children: ["btn1", "btn2"] },
+							{ id: "btn1Label", component: "Text", text: "1st-Channel" },
+							{ id: "btn1", component: "Button", child: "btn1Label", variant: "primary", action: { call: "openUrl", args: { url: "https://t.me/DasyncH" } } },
+							{ id: "btn2Label", component: "Text", text: "2nd-Channel" },
+							{ id: "btn2", component: "Button", child: "btn2Label", variant: "primary", action: { call: "openUrl", args: { url: "https://t.me/Satanic_eX" } } }
+						]
+					}
+				};
+				const { imageMessage } = await prepareWAMessageMedia(
+					{ image: { url: "https://files.catbox.moe/599dfp.jpg" } },
+					{ upload: client.waUploadToServer }
+				)
+					const msg = {
+						interactiveMessage: {
+							header: { imageMessage, hasMediaAttachment: true },
+							bloksWidget: {
+								type: "im_a2ui",
+								data: JSON.stringify(imatakanap),
+								fallback: "XazepysK"
+							},
+							nativeFlowMessage: {
+								messageParamsJson: JSON.stringify({
+									limited_time_offer: {
+										text: "༺ SyncboT ༻",
+										url: "https://t.me/DasyncH",
+										copy_code: "༺ The synC ༻",
+										expiration_time: Date.now() * 1000
+									}
+								}),
+								buttons: [
+									{
+										name: "single_select",
+										buttonParamsJson: JSON.stringify({
+											title: "XazepysK",
+											sections: [{
+												title: "Available Commands",
+												rows: [
+													{ title: ".menu", description: "Rich menu", id: ".menu" },
+													{ title: ".ping", description: "Speed check", id: ".ping" }
+												]
+											}]
+										})
+									}
+								]
+							}
+						}
+					}
+					await client.relayMessage(from, msg, {})
+		        }
+		    break;
             case 'rvo': {
                 let negro = m?.message?.extendedTextMessage?.contextInfo?.quotedMessage;
                 if (!negro) return reply('reply to a view once message');
