@@ -336,7 +336,7 @@ module.exports = async (client, m, cum, store) => {
                 await client.relayMessage(from, msg, {});
             }
             break;
-		    case "menu2": 
+		    case "menu2": {
 				const imatakanap = {
 					version: "v0.9",
 					createSurface: {
